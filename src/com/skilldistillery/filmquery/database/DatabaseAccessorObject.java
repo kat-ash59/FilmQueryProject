@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
@@ -35,6 +36,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 		String user = "student";
 		String pass = "student";
 		Connection conn = null;
+		List<Actor> listOfActors = null;
 
 		
 		try 
@@ -45,6 +47,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 			stmt.setInt(1, filmId);
 			
 			ResultSet results = stmt.executeQuery();
+			
+			
 			
 			if(results.next()) 
 			{
@@ -59,14 +63,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 			     double replacementCost = results.getDouble("replacement_cost");  
 			     String rating = results.getString("rating");
 			     String specialFeatures = results.getString("special_features");
+			     listOfActors = findActorsByFilmId(filmId);
 			     
 			     film = new Film(id, title, description, year, languageId, rentalDuration, rentalRate, 
-			    		 		length, replacementCost, rating, specialFeatures);
+			    		 		length, replacementCost, rating, specialFeatures,listOfActors);
 			     
-			     // the film exists now
-			     // now set its actors
-			     
-			    //film.setActors(finish this);
 			}
 	
 			results.close();
@@ -86,15 +87,93 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 	@Override
 	public Actor findActorById(int actorId) 
 	{
-		return null;
-	}  // end method Actor
+		Actor actor = null;
+		String user = "student";
+		String pass = "student";
+		Connection conn = null;
+
+		
+		try 
+		{
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sqltext = "select * from actor where id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sqltext);
+			stmt.setInt(1, actorId);
+			
+			ResultSet results = stmt.executeQuery();
+			
+			if(results.next()) 
+			{
+			     int id = results.getInt("id");
+			     String firstName = results.getString("first_name");
+			     String lastName = results.getString("last_name");
+			     
+			     actor = new Actor(id, firstName, lastName);
+			     
+			}
+	
+			results.close();
+			stmt.close();
+			conn.close();
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return actor;
+		}  // end method Actor
 
 
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) 
 	{
-		// TODO Auto-generated method stub
-		return null;
+		List<Actor> actorList = new ArrayList<Actor>();
+		Actor actor = null;
+		String user = "student";
+		String pass = "student";
+		Connection conn = null;
+
+		
+		try 
+		{
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sqltext = "select actor.id, actor.first_name, actor.last_name "
+					+ "from actor "
+					+ "join film_actor on film_actor.actor_id = actor.id "
+					+ "join film on film.id = film_actor.film_id "
+					+ "where film.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sqltext);
+			stmt.setInt(1, filmId);
+			
+			ResultSet results = stmt.executeQuery();
+			
+		
+			while (results.next()) 
+			{
+			     int id = results.getInt("actor.id");
+			     String firstName = results.getString("actor.first_name");
+			     String lastName = results.getString("actor.last_name");
+			     
+			     actor = new Actor(id, firstName, lastName);
+			     actorList.add(actor);
+			    
+			     
+			}
+	
+			results.close();
+			stmt.close();
+			conn.close();
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return actorList;
+
 	} // end method List actor
 
 

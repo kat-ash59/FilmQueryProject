@@ -16,14 +16,12 @@ public class Actor
 
 	public Actor(int sagMemeberNumber) 
 	{
-		super();
 		this.id = sagMemeberNumber;
 	} // end constructor
 
 
 	public Actor(String fn, String ln) 
 	{
-		super();
 		this.firstName = fn;
 		this.lastName = ln;
 	}  // end constructor
@@ -31,7 +29,6 @@ public class Actor
 
 	public Actor(int sagMemeberNumber, String fn, String ln) 
 	{
-		super();
 		this.id = sagMemeberNumber;
 		this.firstName = fn;
 		this.lastName = ln;
@@ -73,7 +70,7 @@ public class Actor
 	{
 		this.lastName = lastName;
 	}
-
+	
 
 	@Override
 	public int hashCode() 
@@ -99,9 +96,7 @@ public class Actor
 	@Override
 	public String toString() 
 	{
-		return "Actor [id= " + id + ", firstName= " + firstName + ", lastName=" + lastName + ", getId() = " + getId()
-				+ ", getFirstName()=" + getFirstName() + ", getLastName()=" + getLastName() + ", hashCode()="
-				+ hashCode() + ", getClass()=" + getClass() + ", toString()=" + super.toString() + "]";
+		return "Actor id = " + id + ", firstName = " + firstName + ", lastName = " + lastName; 
 	}
 	
 

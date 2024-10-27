@@ -71,7 +71,24 @@ public class Film
 	}  // end constructor Film
 
 
-
+	public Film(int id, String title, String description, Integer releaseYear, int languageId, int rentalDuration,
+			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
+			List<Actor> actorList) 
+	{
+		super();
+		this.id = id;
+		this.title = title;
+		this.description = description;
+		this.releaseYear = releaseYear;
+		this.languageId = languageId;
+		this.rentalDuration = rentalDuration;
+		this.rentalRate = rentalRate;
+		this.length = length;
+		this.replacementCost = replacementCost;
+		this.rating = rating;
+		this.specialFeatures = specialFeatures;
+		this.actors = actorList;
+	}  // end constructor Film
 
 
 
@@ -230,13 +247,15 @@ public class Film
 
 
 
-	public List<Actor> getActors() {
-		return actors;
+	public List<Actor> getActors() 
+	{
+		return this.actors;
 	}
 
 
 
-	public void setActors(List<Actor> actors) {
+	public void setActors(List<Actor> actors) 
+	{
 		this.actors = actors;
 	}
 
@@ -252,7 +271,8 @@ public class Film
 
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(Object obj) 
+	{
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -271,7 +291,8 @@ public class Film
 
 
 	@Override
-	public String toString() {
+	public String toString() 
+	{
 		return "Film id = " + id + ", title = " + title + ", description = " + description + "\n\t, releaseYear = " + releaseYear
 				+ ", languageId = " + languageId + ", rentalDuration (in days) = " + rentalDuration + ", rentalRate = $" + rentalRate
 				+ ", length of film in minutes = " + length + "\n\t, replacementCost = $" + replacementCost + ", rating = " + rating

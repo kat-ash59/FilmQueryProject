@@ -68,6 +68,8 @@ When a film is retrieved from the database, its actors are also retrieved and in
 
 
 #### User Story #5
+Completed 10/27/24
+
 FilmQuery/com.skilldistillery.filmquery.app.FilmQueryApp
 
 Test your code by running FilmQueryApp.

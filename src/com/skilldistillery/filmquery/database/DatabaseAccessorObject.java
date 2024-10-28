@@ -14,6 +14,7 @@ import com.skilldistillery.filmquery.entities.Film;
 public class DatabaseAccessorObject implements DatabaseAccessor 
 {
 	public static final String URL = "jdbc:mysql://localhost:3306/sdvid";
+	
 
 	
 	
@@ -123,9 +124,48 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 		}
 		
 		return actor;
-		}  // end method Actor
+	}  // end method Actor
 
 
+	
+	@Override
+	public void countNumberOfFilms()
+	{
+		Film film = null;
+		String user = "student";
+		String pass = "student";
+		Connection conn = null;
+
+		int numberOfFilms = 0;
+
+		try 
+		{
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sqltext = "select * from film";
+			PreparedStatement stmt = conn.prepareStatement(sqltext);
+			
+			ResultSet results = stmt.executeQuery();
+			
+			
+			
+			while(results.next()) 
+			{
+			     numberOfFilms++;
+			}
+	
+			results.close();
+			stmt.close();
+			conn.close();
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		film.setNumberOfFilms(numberOfFilms);
+	}
+	
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) 
 	{

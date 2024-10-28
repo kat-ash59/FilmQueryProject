@@ -24,6 +24,8 @@ public class Film
 	private String specialFeatures;
 	private List<Actor> actors;
 	
+	private int numberOfFilms = 1000;
+	
 	
 	
 	
@@ -260,7 +262,18 @@ public class Film
 	}
 
 
+	public int getNumberOfFilms()
+	{
+		return this.numberOfFilms;
+	}
 
+	public void setNumberOfFilms(int numberOfFilms)
+	{
+		this.numberOfFilms = numberOfFilms;
+	}
+	
+	
+	
 	@Override
 	public int hashCode() 
 	{
@@ -293,10 +306,13 @@ public class Film
 	@Override
 	public String toString() 
 	{
-		return "Film id = " + id + ", title = " + title + ", description = " + description + "\n\t, releaseYear = " + releaseYear
+		return "\ttitle = " + title + ", the film id = " + id
+				+ "\n\tdescription = " + description 
+				+ "\n\treleaseYear = " + releaseYear
 				+ ", languageId = " + languageId + ", rentalDuration (in days) = " + rentalDuration + ", rentalRate = $" + rentalRate
-				+ ", length of film in minutes = " + length + "\n\t, replacementCost = $" + replacementCost + ", rating = " + rating
-				+ ", specialFeatures = " + specialFeatures + "\n";
+				+ "\n\tlength of film in minutes = " + length 
+				+ ", replacementCost = $" + replacementCost + ", rating = " + rating
+				+ "\n\tspecialFeatures = " + specialFeatures + "\n";
 	}
 	
 	

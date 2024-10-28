@@ -75,3 +75,13 @@ FilmQuery/com.skilldistillery.filmquery.app.FilmQueryApp
 Test your code by running FilmQueryApp.
 
 
+### Homework portion of work
+Now down to the nitty gritty homework that is going to be graded!
+
+#### User story #1
+The user is presented with a menu in which they can choose to:
+
+	1) Look up a film by its id.
+	2) Look up a film by a search keyword.
+	3) Exit the application.
+

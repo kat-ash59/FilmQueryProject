@@ -93,16 +93,26 @@ completed 10/29/24
 
 If the user looks up a film by id, they are prompted to enter the film id. If the film is not found, they see a message saying so. If the film is found, its title, year, rating, and description are displayed.
 
+note: with user story #4 added language to printout
+
+note: with user story #5 added actor list to printout
+
 
 #### User story #3
 completed 10/29/24
 
 If the user looks up a film by search keyword, they are prompted to enter it. If no matching films are found, they see a message saying so. Otherwise, they see a list of films for which the search term was found anywhere in the title or description, with each film displayed exactly as it is for User Story 2.
 
+note: with user story #4 added language to printout
+
+note: with user story #5 added actor list to printout
+
 #### User story #4
 completed 10/29/24
 
 When a film is displayed, its language (English,Japanese, etc.) is displayed, in addition to the film's title, year, rating, and description.
+
+note: with user story #5 added actor list to printout
 
 #### User story #5
 completed 10/29/24

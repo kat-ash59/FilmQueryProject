@@ -79,9 +79,32 @@ Test your code by running FilmQueryApp.
 Now down to the nitty gritty homework that is going to be graded!
 
 #### User story #1
+completed 10/29/24
+
 The user is presented with a menu in which they can choose to:
 
 	1) Look up a film by its id.
 	2) Look up a film by a search keyword.
 	3) Exit the application.
 
+
+#### User story #2
+completed 10/29/24
+
+If the user looks up a film by id, they are prompted to enter the film id. If the film is not found, they see a message saying so. If the film is found, its title, year, rating, and description are displayed.
+
+
+#### User story #3
+completed 10/29/24
+
+If the user looks up a film by search keyword, they are prompted to enter it. If no matching films are found, they see a message saying so. Otherwise, they see a list of films for which the search term was found anywhere in the title or description, with each film displayed exactly as it is for User Story 2.
+
+#### User story #4
+completed 10/29/24
+
+When a film is displayed, its language (English,Japanese, etc.) is displayed, in addition to the film's title, year, rating, and description.
+
+#### User story #5
+completed 10/29/24
+
+When a film is displayed, the list of actors in its cast is displayed, in addition to the film's title, year, rating, description, and language.

@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.List;
 import java.util.Objects;
 
 public class Actor 
@@ -7,6 +8,9 @@ public class Actor
 	private int id;
 	private String firstName;
 	private String lastName;
+	private List<Actor> listOfAllActors = null;
+	
+	private int numberOfActors = 200;
 	
 	// constructors
 	public Actor() 
@@ -69,6 +73,26 @@ public class Actor
 	public void setLastName(String lastName) 
 	{
 		this.lastName = lastName;
+	}
+	
+	public int getNumberOfActors()
+	{
+		return this.numberOfActors;
+	}
+
+	public void setNumberOfActors(int numberOfActors)
+	{
+		this.numberOfActors = numberOfActors;
+	}
+	
+	public List getListOfAllActors()
+	{
+		return this.listOfAllActors;
+	}
+	
+	public void setListOfAllActors(List listOfAllActors)
+	{
+		this.listOfAllActors = listOfAllActors;
 	}
 	
 

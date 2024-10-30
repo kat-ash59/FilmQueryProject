@@ -40,6 +40,9 @@ public class FilmQueryApp
 		System.out.println("\n\n=======================================================================");
 		System.out.println("\n\nPrinting out all movies and their actors");
 		getAndPrintAllActorsInAllMovies();
+		System.out.println("\n\n=======================================================================");
+		System.out.println("\n\nPrinting out all actors by film id");
+		getAndPrintAllActorsByFilmId(filmId);
 		
 		
 		
@@ -67,14 +70,14 @@ public class FilmQueryApp
 			{
 				int filmId = 0;
 				filmId = printLookUpFilmByIdMenu(input);
-				getAndPrintFilmByFilmId(filmId);
-				getAndPrintAllActorsByFilmId(filmId);
-				
+				getAndPrintFilmAndActorsByFilmId(filmId);
 			} // end else
 			else if (userChoice == 2)
 			{
-				System.out.println("\n\nthis is where the film will be looked up by a keyword ");
-				System.out.println("not implemented yet\n\n");
+				String keyword = null;
+				keyword = printKeywordMenu(input);
+				getAndPrintFilmByKeyword(keyword);
+				
 			} // end else if
 		
 				userChoice = printMenu(input);
@@ -92,21 +95,37 @@ public class FilmQueryApp
 	private int printMenu(Scanner input)
 	{
 		int userChoice = 0;
+		boolean validChoice = false;
 		
-		System.out.println("\n\nPlease enter the number of the option from the following selection:");
-		System.out.println("=========================================================================");
-		System.out.println("1. Look up a film by its id.");
-		System.out.println("2. Look up a film title by any keyword ");
-		System.out.println("3. Exit the application ");
-		System.out.println("=========================================================================");
-		System.out.print("Enter your choice here : ");
-		userChoice = input.nextInt();
-		
-		if ((userChoice < 1) || (userChoice > 3))
+		while (validChoice == false)
 		{
-			System.out.println("\n\nInvalid choice please try again and enter a number 1 thru 3\n\n");
-		}
+			System.out.println("\n\nPlease enter the number of the option from the following selection:");
+			System.out.println("=========================================================================");
+			System.out.println("1. Look up a film by its id.");
+			System.out.println("2. Look up a film title by any keyword ");
+			System.out.println("3. Exit the application ");
+			System.out.println("=========================================================================");
+			System.out.print("Enter your choice here : ");
+			try
+			{
+				userChoice = Integer.parseInt(input.nextLine());
+			}
+			catch (NumberFormatException e)
+			{
+				// throwing error above ignoring now only used for debug
+				//e.printStackTrace();
+			}
 			
+			if ((userChoice < 1) || (userChoice > 3))
+			{
+				System.out.println("\n\nInvalid choice please try again and enter a number 1 thru 3\n\n");
+			}
+			else
+			{
+				validChoice = true;
+			}
+		}
+				
 		return userChoice;
 	} // end method printMenu
 	
@@ -114,23 +133,70 @@ public class FilmQueryApp
 	{
 		int userChoice = 0;
 		int numFilms = 0;
+		boolean validChoice = false;
 		
 		Film films = new Film();
 		numFilms = films.getNumberOfFilms();
 		
-		System.out.println("\n\nWe have " + numFilms + " film titles to choose from!");
-		System.out.println("Please enter the number the id number for the film you would like:");
-		System.out.println("=========================================================================");
-		System.out.print("Enter your choice here : ");
-		userChoice = input.nextInt();
-		
-		if ((userChoice < 1) || (userChoice > numFilms))
+		while (validChoice == false)
 		{
-			System.out.println("\n\nInvalid choice please try again and enter a number 1 thru " + numFilms + "\n\n");
+			System.out.println("\n\nWe have " + numFilms + " film titles to choose from!");
+			System.out.println("Please enter the number the id number for the film you would like:");
+			System.out.println("=========================================================================");
+			System.out.print("Enter your choice here : ");
+			try
+			{
+				userChoice = Integer.parseInt(input.nextLine());
+			}
+			catch (NumberFormatException e)
+			{
+				// throwing error above ignoring now only used for debug
+				//e.printStackTrace();
+			}
+				
+			
+			if ((userChoice < 1) || (userChoice > numFilms))
+			{
+				System.out.println("\n\nInvalid choice please try again and enter a number 1 thru " + numFilms + "\n\n");
+			}
+			else
+			{
+				validChoice = true;
+				
+			}
 		}
 		
 		return userChoice;
 	} // end method printLookUpFilmByIdMenu
+	
+	private String printKeywordMenu(Scanner input)
+	{
+		String userKeyword = null;
+		boolean validChoice = false;
+		
+		while (validChoice == false)
+		{
+			System.out.println("\n\nWe can search the Titles and Descriptions for any word you would like");
+			System.out.println("Note: this search will return a List of films that have the"
+								+ "\n\tword alone or as part of another word in it.");
+			System.out.println( "Please enter a word you would like to search for");
+			System.out.println("=========================================================================");
+			System.out.print("Enter your choice here : ");
+			userKeyword = input.nextLine();
+			
+			if (userKeyword.isEmpty())
+			{
+				System.out.println("\n\nInvalid choice please try again and enter a word you would like to search for.\n\n");
+			}
+			else
+			{
+				validChoice = true;
+				
+			}
+		}
+		
+		return userKeyword;
+	} // end method printKeywordMenu
 	
 	
 	private void getAndPrintAllActorsInAllMovies()
@@ -150,33 +216,37 @@ public class FilmQueryApp
 	private void getAndPrintAllActorsByFilmId(int filmId)
 	{
 
-		List<Actor> tmpActorsList = new ArrayList<Actor>();
-		
-		
+		List<Actor> tmpActorsList = new ArrayList<Actor>();	
 		Film film = db.findFilmById(filmId);
-		db.findFilmById(filmId);
 		tmpActorsList = db.findActorsByFilmId(filmId);
+		
 		System.out.println("\n\nActors for the film id " + filmId +  " titled " +
 						film.getTitle() + " are:");
-		
-		for (Actor actor : tmpActorsList)
-		{
-			System.out.println("\t actor id " + actor.getId() + 
-								", actor first name " + actor.getFirstName() +
-								", actor last name " + actor.getLastName() + "\n");
-		}
+		printActorsList(tmpActorsList);
 		
 	} // end method getAndPrintAllActorsByFilmId
 
+
+	
+	private void printActorsList(List<Actor> tmpActorsList)
+	{
+		for (Actor actor : tmpActorsList)
+		{
+			printActorInformation(actor);
+		}
+	} // end method printActorsList
+	
+	
 	private void getAndPrintAllActorsByActorId()
 	{
 
 		// for testing get actor by actor id
-		for (int theActorId = 1; theActorId <= 201; theActorId++)
+		int maxNumberOfActors = db.countNumberOfAllActors();
+		
+		for (int theActorId = 1; theActorId <= maxNumberOfActors ; theActorId++)
 		{
-			Actor actor = db.findActorById(theActorId);
-			System.out.println("\nActor id " + actor.getId() + " First Name " + actor.getFirstName() +
-								" Last Name " + actor.getLastName());
+			Actor actor = db.findActorByActorId(theActorId);
+			printActorInformation(actor);
 		}
 	
 	}  // end method getAndPrintAllActorsByActorId
@@ -184,25 +254,89 @@ public class FilmQueryApp
 	private void getAndPrintAllFilmsAndFilmIds()
 	{
 		// for testing get film by film id
-		for (int theFilmId = 1; theFilmId <= 1000; theFilmId++)
+		int maxNumberOfFilms = db.countNumberOfAllFilms();
+		String language = null;
+		
+		for (int theFilmId = 1; theFilmId <= maxNumberOfFilms; theFilmId++)
 		{
-			Film film = db.findFilmById(theFilmId);
-			db.findFilmById(theFilmId);
-			System.out.println("\n\nFilm title " + film.getTitle() + " description " + film.getDescription());
+			Film film = db.findFilmAndActorsByFilmId(theFilmId);
+			printFilmInformation(film);
 		}
 
 	} // end getAndPrintAllFilmsAndFilmIds
 	
+	
+	
 	private void getAndPrintFilmByFilmId(int filmId)
 	{
-
-		// for testing film by using specific film id
-		Film film = db.findFilmById(filmId);
-		System.out.println("\n\nThe film you selected is:");
-		System.out.println(film);
-		System.out.println("\n\n");
-
+		Film film = db.findFilmAndActorsByFilmId(filmId);
+		printFilmInformation(film);
+		
 	}  // end method getAndPrintAllFilmsAndFilmIds
+	
+	private void getAndPrintFilmAndActorsByFilmId(int filmId)
+	{
+		Film film = db.findFilmAndActorsByFilmId(filmId);
+		List<Actor> listOfActors = film.getActors();
+		System.out.println("\n\nThe film id you selected is: " + filmId);
+		getAndPrintFilmByFilmId(filmId);
+		System.out.println("\nThe Actors in the film " + film.getTitle() + " are:");
+		printActorsList(listOfActors);
+	}
+	
+	private void getAndPrintFilmByKeyword(String keyword)
+	{
+		List<Film> filmList = db.findFilmsByKeyword(keyword);
+		if ((filmList.isEmpty()) || (filmList == null))
+		{
+			System.out.println("\n\nI am sorry we could not find any films with your word \"" + keyword
+								+ "\" anywhere in the title or description\n");
+			System.out.println("Please try again");
+		}
+		else
+		{
+			System.out.println("\n\nThe keyword you chose is \"" + keyword + "\"");
+			if (filmList.size() == 1)
+			{
+				System.out.println("There is " + filmList.size() + " film found in your selection.\n");
+			}
+			else 
+			{
+				System.out.println("There were " + filmList.size() + " films found in your selection.\n");
 
+			}
+			printFilmList(filmList);
+		}
+	}
+	
+	private void printFilmList(List<Film> tmpFilmList)
+	{
+				
+		for (Film film : tmpFilmList)
+		{
+			printFilmInformation(film);
+			printActorsList(film.getActors());
+		}
+	}
+	
+
+	private void printFilmInformation(Film film)
+	{
+		System.out.println("\n\nThe information for film " + film.getId() + " is");
+		System.out.println("\tThe title of your film is = " + film.getTitle() 
+							+ "\n\tThe year the film was released = " + film.getReleaseYear()
+							+ "\n\tThe rating of your film is  = " + film.getRating()
+							+ "\n\tThe language your film was created in = " + film.getLanguage()
+							+ "\n\tThe description of your film is = \n\t\t" + film.getDescription());
+		System.out.println("\n");
+	}
+	
+	private void printActorInformation(Actor actor)
+	{
+		System.out.println("\tThe actor\'s id = " + actor.getId() + 
+				", the actor\'s first name = " + actor.getFirstName() +
+				", the actor\'s last name = " + actor.getLastName() + "\n");
+	
+	}
 	
 }  // end class Film Query App

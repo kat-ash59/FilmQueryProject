@@ -11,12 +11,26 @@ public interface DatabaseAccessor
 	public Film findFilmById(int filmId);
 	
 	
-	public Actor findActorById(int actorId);
+	public Actor findActorByActorId(int actorId);
 	
 	
 	public List<Actor> findActorsByFilmId(int filmId);
 
 
-	public void countNumberOfFilms();
+	public Film findFilmAndActorsByFilmId(int filmId);
+
+
+	public int countNumberOfAllActors();
+
+
+	public int countNumberOfAllFilms();
+
+
+	public List<Film> findFilmsByKeyword(String keyword);
+
+
+	public String getLanguageByFilmId(int filmId);
+
+
 	
 }  // end interface DatabaseAccessor

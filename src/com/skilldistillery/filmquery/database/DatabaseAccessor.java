@@ -30,7 +30,7 @@ public interface DatabaseAccessor
 
 
 	public String getLanguageByFilmId(int filmId);
-
-
+	
+	public String getFilmCategoryByFilmId(int filmId);
 	
 }  // end interface DatabaseAccessor

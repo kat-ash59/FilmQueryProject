@@ -118,3 +118,30 @@ note: with user story #5 added actor list to printout
 completed 10/29/24
 
 When a film is displayed, the list of actors in its cast is displayed, in addition to the film's title, year, rating, description, and language.
+
+
+#### Stretch Goal #1
+completed 11/1/24 - but only for singleton film selection not for keyword films
+
+When a film is displayed, the user can choose from a sub-menu whether to:
+
+1) Return to the main menu.
+
+2) View all film details.
+
+If they choose to view all details, they will see all column values of the film record they chose.
+
+#### Stretch Goal #2
+completed 11/1/24
+
+When viewing film details, the user will see a list of all the film's categories (Family, Comedy, etc.) for the film.
+
+#### Stretch Goal #3
+did not complete
+
+When viewing film details, the user will see a list of all copies of the film in inventory, with their condition.
+
+#### Stretch Goal #4
+did not complete
+
+Write JUnit tests for DatabaseAccessorObject's methods.

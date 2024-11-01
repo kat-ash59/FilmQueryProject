@@ -24,6 +24,7 @@ public class Film
 	private String specialFeatures;
 	private List<Actor> actors;
 	private String language;
+	private String category;
 	
 	private int numberOfFilms = 1000;
 	
@@ -76,7 +77,7 @@ public class Film
 
 	public Film(int id, String title, String description, Integer releaseYear, int languageId, int rentalDuration,
 			double rentalRate, int length, double replacementCost, String rating, String specialFeatures,
-			List<Actor> actorList, String language) 
+			List<Actor> actorList, String language, String category) 
 	{
 		super();
 		this.id = id;
@@ -92,6 +93,7 @@ public class Film
 		this.specialFeatures = specialFeatures;
 		this.actors = actorList;
 		this.language = language;
+		this.category = category;
 	}  // end constructor Film
 
 
@@ -172,6 +174,16 @@ public class Film
 	public void setLanguage(String language)
 	{
 		this.language = language;
+	}
+	
+	public String getCategory()
+	{
+		return category;
+	}
+	
+	public void setCategory(String category)
+	{
+		this.category = category;
 	}
 	
 

@@ -34,6 +34,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 		}
 	}
 	
+	@Override
 	public Film findFilmAndActorsByFilmId(int filmId)
 	{
 		Film tmpFilm = null;
@@ -41,14 +42,16 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 		tmpFilm = findFilmById(filmId);
 		listOfActors = findActorsByFilmId(filmId);
 		String language = getLanguageByFilmId(filmId);
+		String category = getFilmCategoryByFilmId(filmId);
 	    
 	    film = new Film(tmpFilm.getId(), tmpFilm.getTitle(), tmpFilm.getDescription(), 
 	    				tmpFilm.getReleaseYear(), tmpFilm.getLanguageId(), tmpFilm.getRentalDuration(),
 	    				tmpFilm.getRentalRate(), tmpFilm.getLength(), tmpFilm.getReplacementCost(), 
-	    				tmpFilm.getRating(), tmpFilm.getSpecialFeatures(),listOfActors, language);
+	    				tmpFilm.getRating(), tmpFilm.getSpecialFeatures(),listOfActors, language, category);
 	    return film;
 	     
 	}
+
 
 	@Override
 	public Film findFilmById(int filmId) 
@@ -79,9 +82,10 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 			     String specialFeatures = results.getString("special_features");
 			     List<Actor> actorList = findActorsByFilmId(id);
 			     String language = getLanguageByFilmId(filmId);
+			     String category = getFilmCategoryByFilmId(filmId);
 			     
 			     film = new Film(id, title, description, year, languageId, rentalDuration, rentalRate, 
-			    		 		length, replacementCost, rating, specialFeatures, actorList, language );
+			    		 		length, replacementCost, rating, specialFeatures, actorList, language, category );
 			     
 			}
 	
@@ -100,6 +104,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 	}  // end method findFilmById
 
 	
+
 	@Override
 	public List<Film> findFilmsByKeyword(String keyword) 
 	{
@@ -133,9 +138,10 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 			     String specialFeatures = results.getString("special_features");
 			     String language = getLanguageByFilmId(id);
 			     actorList = findActorsByFilmId(id);
+			     String category = getFilmCategoryByFilmId(id);
 			     
 			     film = new Film(id, title, description, year, languageId, rentalDuration, rentalRate, 
-			    		 		length, replacementCost, rating, specialFeatures, actorList, language);
+			    		 		length, replacementCost, rating, specialFeatures, actorList, language, category);
 			     
 			     filmList.add(film);
 			     
@@ -156,7 +162,43 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 	}  // end method findFilmById
 
 
+	@Override
+	public String getFilmCategoryByFilmId(int filmId) 
+	{
+		String category = null;
+		
+		try 
+		{
+			conn = DriverManager.getConnection(URL, user, pass);
+			String sqltext = "select category.name "
+					+ "from category "
+					+ "join film_category on category.id = film_category.category_id "
+					+ "join film on film.id = film_category.film_id "
+					+ "where film.id = ?";
+			PreparedStatement stmt = conn.prepareStatement(sqltext);
+			stmt.setInt(1, filmId);
+			
+			ResultSet results = stmt.executeQuery();
+			
+		
+			while (results.next()) 
+			{
+			     category = results.getString("category.name"); 
+			}
 	
+			results.close();
+			stmt.close();
+			conn.close();
+		} 
+		catch (SQLException e) 
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return category;
+}
+
 	@Override
 	public Actor findActorByActorId(int actorId) 
 	{
@@ -347,7 +389,5 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 		return numberOfFilms;
 	} // end method countNumberOfFilms
 	
-	
-
 
 }  // end class DatabaseAccessorObject

@@ -145,3 +145,57 @@ When viewing film details, the user will see a list of all copies of the film in
 did not complete
 
 Write JUnit tests for DatabaseAccessorObject's methods.
+
+
+### Homework portion of work part duex!
+This portion continues forward with CRUD (Create, Read, Update, and Delete data in a database) for this project.
+
+
+#### User Story #1B
+completed in lab class 11/2/24
+
+In your DAO (This Film Query App) code, implement a createFilm(Film aFilm) method that takes a newly created Film object and inserts it into the database.
+
+required fields are:
+
+	title, language_id - must have
+
+	description -  desired
+
+The method should return the persisted Film object on success, or null if the insert fails.
+
+For now ignore a Film's categories and actors, and just hardcode the Film's language_id to 1 (English).
+
+Be certain to capture the newly generated id of the persisted Film and assign it to the returned Film object before returning from the method.
+
+
+In your app, add an "Add New Film" item to your menu. When chosen, prompt the user to input the required film attributes.
+
+The required attributes are those marked in the database as being both non-Nullable and having no default value provided.
+
+Use the user's inputs to create a new Film object, and pass the new Film object to your DAO's createFilm().
+
+On a successful return, display a success message with the generated id of the newly persisted film.
+
+
+#### User Story #2B
+completed 11/2/24
+
+In your DAO code, implement deleteFilm(Film aFilm) that takes a Film as its parameter.
+
+The method should return true upon successful deletion or false if the delete fails.
+In your app, add a "Delete Film" item to your menu. When chosen, prompt the user to input the id of the film to delete.
+
+How will your code provide the Film object associated with the requested id?
+
+To avoid parent-child (foreign key issues), test your delete using only ids of films your program has created.
+
+
+#### User Story #3B
+
+In your DAO code, implement updateFilm(Film aFilm) that takes a Film as its parameter.
+
+The method should return true upon successful update or false if the update fails.
+In your app, add an "Update Film" item to your menu. When chosen, prompt the user to input the id of the film to update, allowing (for simplicity) updates on either the film's title and/or the film's description.
+
+How will your code provide the Film object associated with the requested id?

@@ -51,7 +51,14 @@ public class Film
 	}
 
 
-	
+	// film must have id, title, language id
+	public Film(int id, String title, int languageId, String description) 
+	{
+		this.id = id;
+		this.title = title;
+		this.languageId = languageId;
+		this.description = description;
+	}	
 	
 
 	
@@ -338,9 +345,7 @@ public class Film
 				+ ", replacementCost = $" + replacementCost + ", rating = " + rating
 				+ "\n\tspecialFeatures = " + specialFeatures + "\n";
 	}
-	
-	
-	
-	
-	
+
+
+
 } // end class Film

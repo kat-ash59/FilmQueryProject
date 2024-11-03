@@ -122,6 +122,13 @@ public class Actor
 	{
 		return "Actor id = " + id + ", firstName = " + firstName + ", lastName = " + lastName; 
 	}
+
+
+	public Film[] getFilms() 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}  // end method getFilms
 	
 
 }  // end class actor

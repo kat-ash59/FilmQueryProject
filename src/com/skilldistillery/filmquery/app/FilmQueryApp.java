@@ -67,6 +67,7 @@ public class FilmQueryApp
 
 		startUserInterface(input, firstLaunch);
 		
+		// System.out.println("Just before input.close()");
 		input.close();
 	} // end method launch
 
@@ -81,22 +82,75 @@ public class FilmQueryApp
 		}
 		userChoice = printMainMenu(input);
 		
-		while (userChoice != 3)
+		while (userChoice != 5)
 		{
 			if (userChoice == 1)
 			{
 				int filmId = 0;
 				filmId = printLookUpFilmByIdMenu(input);
 				getAndPrintFilmAndActorsByFilmId(filmId);
-				System.out.println("before call to printFullFilmDescriptionMenu");
+				//System.out.println("before call to printFullFilmDescriptionMenu");
 				printFullFilmDescriptionMenu(input,filmId);
-			} // end else
+			} // end if choose to get film by film id  and print full film description
 			else if (userChoice == 2)
 			{
 				String keyword = null;
 				keyword = printKeywordMenu(input);
 				getAndPrintFilmByKeyword(keyword);				
-			} // end else if
+			} // end else if choose keyword search
+			else if (userChoice == 3)
+			{
+				Film film = new Film();
+				film = printAddFilmMenu(input, film);
+				film = db.createFilm(film);
+				int filmId = film.getId();
+				getAndPrintFilmByFilmId(filmId);
+				
+			} // end if choose add film
+			else if (userChoice == 4)
+			{
+				//System.out.println("\nJust inside user choice to delete film");
+				List<Film> filmList = null;
+				filmList = db.getListOfAllFilms();
+				//System.out.println("Just after get list of all films in delete films");
+				//System.out.println("filmList = " + filmList);
+				if (filmList != null)
+				{
+					
+					//System.out.println("\nJust after get list of films");
+					
+					boolean deleteSuccessful = false;
+					int filmIdToDelete = 0;
+					String filmTitleToDelete = null;
+					
+					Film film = new Film();
+					//System.out.println("\njust before print delete film menu\n");
+					film = printDeleteFilmMenu(input, filmList);
+					//System.out.println("\nJust after print delete film menu");
+					
+					filmIdToDelete = film.getId();
+					//System.out.println("\njust after get id for film to delete");
+					
+					filmTitleToDelete = film.getTitle();
+							
+					deleteSuccessful = db.deleteFilm(film);
+					
+					if (deleteSuccessful == true)
+					{
+						System.out.println("You have successfully deleted the film titlee = " + filmTitleToDelete);
+					}
+					else
+					{
+						System.out.println("There was an error deleting the film with film id = " + filmIdToDelete  + "\n" 
+										+ "\tand title = " + filmTitleToDelete);
+					}
+				} // end if filmList = null
+				
+			} // end else if choose delete
+			else
+			{
+				userChoice = 5;
+			} // end default user exit
 		
 			userChoice = printMainMenu(input);
 
@@ -109,6 +163,7 @@ public class FilmQueryApp
 	}  // end method startUserInterface
 	
 	
+
 	private int printMainMenu(Scanner input)
 	{
 		int userChoice = 0;
@@ -120,7 +175,9 @@ public class FilmQueryApp
 			System.out.println("=========================================================================");
 			System.out.println("1. Look up a film by its id.");
 			System.out.println("2. Look up a film title by any keyword ");
-			System.out.println("3. Exit the application ");
+			System.out.println("3. Add a film to the library");
+			System.out.println("4. Choose a film to delete from the library");
+			System.out.println("5. Exit the application ");
 			System.out.println("=========================================================================");
 			System.out.print("Enter your choice here : ");
 			try
@@ -133,9 +190,9 @@ public class FilmQueryApp
 				//e.printStackTrace();
 			}
 			
-			if ((userChoice < 1) || (userChoice > 3))
+			if ((userChoice < 1) || (userChoice > 5))
 			{
-				System.out.println("\n\nInvalid choice please try again and enter a number 1 thru 3\n\n");
+				System.out.println("\n\nInvalid choice please try again and enter a number 1 thru 4\n\n");
 			}
 			else
 			{
@@ -257,8 +314,131 @@ public class FilmQueryApp
 		
 	} // end method printFullFilmDescriptionMenu
 
+
+	private Film printAddFilmMenu(Scanner input, Film film) 
+	{
+		boolean userChoice = false;
+		String title = null;
+		String description = null;
+		
+		System.out.println("\n\nYou will be asked to enter your Film\'s title and description:");
+		System.out.println("=========================================================================");
+		
+		
+		
+		while (userChoice == false)
+		{
+			
+			System.out.print("Please enter your title here : ");
+			
+			title = input.nextLine();
+			
+			if ((title.length() > 255) || (title.isEmpty()))
+			{
+				System.out.println("Your title must be less than or equal to 255 characters");
+				System.out.println("and must not be blank or just contain blank spaces)");
+				System.out.println("Please try again");
+			}
+			else
+			{
+				film.setTitle(title);
+				userChoice = true;
+			}
+		} // end while loop for setting title
+		
+		userChoice = false;
+		
+		while (userChoice == false)
+		{
+			
+			System.out.print("Please enter your film description here : ");
+			
+			description = input.nextLine();
+			if (description.isEmpty())
+			{
+				System.out.println("Your description must not be blank or just contain blank spaces)");
+				System.out.println("Please try again");
+			}
+			else
+			{
+				film.setDescription(description);
+				userChoice = true;
+			}
+		} // end while loop for setting description
+		
+		return film;
+	} // end method printAddFilmMenu
 	
 	
+	private Film printDeleteFilmMenu(Scanner input, List<Film> filmList) 
+	{
+		//System.out.println("just inside printdeletefilmmenu");
+		boolean userChoice = false;
+		int filmId = 0;
+		int numberOfFilms = db.countNumberOfAllFilms()+1;
+		//System.out.println("\njust after getting the number of films in printDeleteFilmMenu");
+		//System.out.println("number of films is " + numberOfFilms);
+		Film selectedFilm = new Film();
+		
+		System.out.println("\n\nThe list of Films and their Titles that you can choose to delete are: \n");
+		System.out.println("======================================================================================\n");
+				
+		printFilmListByIdAndTitle(filmList);
+		
+		System.out.println("\n\nFrom the list of films above please enter the film id you would like to delete:");
+		System.out.println("======================================================================================");
+		
+		while (userChoice == false)
+		{
+			
+			System.out.print("Please enter the Film Id that you want to delete here : ");
+			
+			userChoice = false;
+		
+			try
+			{
+				filmId = Integer.parseInt(input.nextLine());
+			}
+			catch (NumberFormatException e)
+			{
+				// throwing error above ignoring now only used for debug
+				//e.printStackTrace();
+			}
+			int  maxFilmId = db.getMaxIdFromFilmTable();
+			if ((filmId < 1000 ) || (filmId > maxFilmId))
+			{
+				System.out.println("Your selected an invalid film id");
+				System.out.println("Please try again");
+			}
+			else
+			{
+				selectedFilm = db.findFilmAndActorsByFilmId(filmId);
+				userChoice = true;
+			}
+		} // end while loop for getting film to delete
+		
+		return selectedFilm;
+
+	}
+
+	
+	private void printFilmListByIdAndTitle(List<Film> filmList) 
+	{
+		//System.out.println("\n\nJust inside printFilmListByIdAndTitle\n");
+		//System.out.println("the size of the filmlist is " + filmList.size());
+		for (Film film : filmList)
+		{
+			// when building the film list may have null entries for some film id's
+			// don't want to print those out
+			if (film != null)
+			{
+				System.out.println("\tThe films\'s id = " + film.getId() + 
+									", the film\'s title = " + film.getTitle() + "\n");
+			}
+		}
+		
+	} // end printFilmListIdAndTitle
+
 	private void getAndPrintAllActorsInAllMovies()
 	{
 
@@ -338,7 +518,12 @@ public class FilmQueryApp
 	private void getAndPrintFilmByFilmId(int filmId)
 	{
 		Film film = db.findFilmAndActorsByFilmId(filmId);
-		printFilmInformation(film);
+		if (film != null)
+		{
+			System.out.println("\n\nYou have successfully added your film to our libary\n");
+			printFilmInformation(film);
+		}
+		
 		
 	}  // end method getAndPrintAllFilmsAndFilmIds
 	

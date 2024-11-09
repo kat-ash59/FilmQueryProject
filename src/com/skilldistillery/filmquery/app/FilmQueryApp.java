@@ -54,7 +54,8 @@ public class FilmQueryApp
 		getAndPrintFilmAndActorsByFilmId(filmId);
 		System.out.println("=======================================================================");
 		System.out.println("Printing a film and actors with a keyword");
-		getAndPrintFilmByKeyword("Bull");
+		List<Film> filmList = getFilmListByKeyword("Bull");
+		printFilmList(filmList);
 		
 		
 		
@@ -82,7 +83,7 @@ public class FilmQueryApp
 		}
 		userChoice = printMainMenu(input);
 		
-		while (userChoice != 5)
+		while (userChoice != 6)
 		{
 			if (userChoice == 1)
 			{
@@ -95,8 +96,10 @@ public class FilmQueryApp
 			else if (userChoice == 2)
 			{
 				String keyword = null;
+				List<Film> filmList = new ArrayList<Film>();
 				keyword = printKeywordMenu(input);
-				getAndPrintFilmByKeyword(keyword);				
+				filmList = getFilmListByKeyword(keyword);
+				printFilmList(filmList);
 			} // end else if choose keyword search
 			else if (userChoice == 3)
 			{
@@ -137,7 +140,7 @@ public class FilmQueryApp
 					
 					if (deleteSuccessful == true)
 					{
-						System.out.println("You have successfully deleted the film titlee = " + filmTitleToDelete);
+						System.out.println("You have successfully deleted the film title = " + filmTitleToDelete);
 					}
 					else
 					{
@@ -147,14 +150,62 @@ public class FilmQueryApp
 				} // end if filmList = null
 				
 			} // end else if choose delete
+			else if (userChoice == 5)
+			{
+				System.out.println("\n\nYou will be asked to enter a keyword to search for the film you would like to update");
+				String keyword = null;
+				List<Film> filmList = new ArrayList<Film>();
+				keyword = printKeywordMenu(input);
+				filmList = getFilmListByKeyword(keyword);
+				printFilmListByIdAndTitle(filmList);
+				
+				if (filmList != null)
+				{
+					
+					System.out.println("\nJust after get list of films by keyword");
+					
+					boolean updateSuccessful = false;
+					int filmIdToUpdate = 0;
+					String filmTitleToUpdate = null;
+					String filmDescriptionToUpdate = null;
+					
+					Film film = new Film();
+					System.out.println("\njust before print update film menu\n");
+					film = printUpdateFilmMenu(input, filmList);
+					//System.out.println("\nJust after print delete film menu");
+					
+					filmIdToUpdate = film.getId();
+					//System.out.println("\njust after get id for film to delete");
+					
+					filmTitleToUpdate = film.getTitle();
+					filmDescriptionToUpdate = film.getDescription();
+							
+					updateSuccessful = db.updateFilm(film);
+					
+					if (updateSuccessful == true)
+					{
+						System.out.println("\n=========================================================================");
+						System.out.println("\nYou have successfully updated the film whose id is = " + film.getId());
+						System.out.println("\tThe new title for the film is  = " + film.getTitle());
+						System.out.println("\tThe new description for the film is = " + film.getDescription());
+						System.out.println("\n=========================================================================\n");
+					}
+					else
+					{
+						System.out.println("There was an error updating the film with film id = " + filmIdToUpdate  + "\n" 
+										+ "\tand title = " + filmTitleToUpdate
+										+ "\n\tand description = " + filmDescriptionToUpdate);
+					}
+				} // end if filmList = null
+			} // end else if choose update film
 			else
 			{
-				userChoice = 5;
+				userChoice = 6;
 			} // end default user exit
 		
 			userChoice = printMainMenu(input);
 
-		} // end while loop
+		} // end while loop userChoice != 6
 		
 		System.out.println("\n\nThank-you for visiting our Film Query App!");
 		System.out.println("We hope you enjoyed the information we provided.");
@@ -163,6 +214,8 @@ public class FilmQueryApp
 	}  // end method startUserInterface
 	
 	
+
+
 
 	private int printMainMenu(Scanner input)
 	{
@@ -177,7 +230,8 @@ public class FilmQueryApp
 			System.out.println("2. Look up a film title by any keyword ");
 			System.out.println("3. Add a film to the library");
 			System.out.println("4. Choose a film to delete from the library");
-			System.out.println("5. Exit the application ");
+			System.out.println("5. Choose a film to update in the library");
+			System.out.println("6. Exit the application ");
 			System.out.println("=========================================================================");
 			System.out.print("Enter your choice here : ");
 			try
@@ -190,9 +244,9 @@ public class FilmQueryApp
 				//e.printStackTrace();
 			}
 			
-			if ((userChoice < 1) || (userChoice > 5))
+			if ((userChoice < 1) || (userChoice > 6))
 			{
-				System.out.println("\n\nInvalid choice please try again and enter a number 1 thru 4\n\n");
+				System.out.println("\n\nInvalid choice please try again and enter a number 1 thru 6\n\n");
 			}
 			else
 			{
@@ -421,6 +475,154 @@ public class FilmQueryApp
 
 	}
 
+
+	private Film printUpdateFilmMenu(Scanner input, List<Film> filmList) {
+		
+		//System.out.println("just inside printUpdatefilmMenu");
+				boolean userChoice = false;
+				int filmId = 0;
+				//System.out.println("\njust after getting the number of films in printUpdateFilmMenu");
+				//System.out.println("number of films is " + numberOfFilms);
+				Film selectedFilm = new Film();
+				String userEnteredTitle = null;
+				String userEnteredDescription = null;
+				int userAnswer = 0;
+				
+				System.out.println("\n\nThe list of Films and their Titles that you can choose to update are: \n");
+				System.out.println("======================================================================================\n");
+						
+				printFilmListByIdAndTitle(filmList);
+				
+				System.out.println("\n\nFrom the list of films above please enter the film id you would like to update:");
+				System.out.println("======================================================================================");
+				
+				while (userChoice == false)
+				{
+					
+					System.out.print("Please enter the Film Id that you want to update here : ");
+					
+					userChoice = false;
+				
+					try
+					{
+						filmId = Integer.parseInt(input.nextLine());
+					}
+					catch (NumberFormatException e)
+					{
+						// throwing error above ignoring now only used for debug
+						//e.printStackTrace();
+					}
+					// going to ignore error handling of them entering an id that is not in the list and ending up 
+					// updating the wrong film
+					// to solve this problem, need to get filmId's for each of the films in the filmList
+					// would use for each loop and assign each film id a place in an array of integers
+					// and then check if film id they entered is in the list
+					// if not print error and ask them to enter it again with a choice of numbers
+					int  maxFilmId = db.getMaxIdFromFilmTable();
+					if (filmId > maxFilmId)
+					{
+						System.out.println("Your selected an invalid film id");
+						System.out.println("Please try again");
+					}
+					else
+					{
+						selectedFilm = db.findFilmAndActorsByFilmId(filmId);
+						userChoice = true;
+					}
+				} // end while loop for getting film to update
+				
+				userChoice = false;
+				
+				
+				while (userChoice == false)
+				{
+					
+					System.out.println("\nWould you like to update the title of the Film?");
+					System.out.println("1. Yes");
+					System.out.println("2. No");
+					System.out.println("=========================================================================");
+					
+					System.out.print("Please enter 1 for Yes or 2 for No here: ");
+					try
+					{
+						userAnswer = Integer.parseInt(input.nextLine());
+					}
+					catch (NumberFormatException e)
+					{
+						// throwing error above ignoring now only used for debug
+						//e.printStackTrace();
+					}
+					
+					if (userAnswer == 2)
+					{
+						userChoice = true;
+					}
+					else
+					{
+						while (userChoice == false)
+						{
+							System.out.print("\nPlease enter your new title for the film here: ");
+							
+							userEnteredTitle = input.nextLine();
+						
+							if ((userEnteredTitle.length() > 255) || (userEnteredTitle.isEmpty()))
+							{
+								System.out.println("\n\nYour title must be less than or equal to 255 characters");
+								System.out.println("and must not be blank or just contain blank spaces)");
+								System.out.println("Please try again\n\n");
+							}
+							else
+							{
+								selectedFilm.setTitle(userEnteredTitle);
+								userChoice = true;
+							}
+						}
+						userChoice = true;
+					} // end else enter the new title
+				} // end while loop for setting title
+				
+				
+				// set choice back to false so can change description if they want
+				userChoice = false;	
+				
+				while (userChoice == false)
+				{
+					
+					System.out.println("\nWould you like to update the Description of the Film?");
+					System.out.println("1. Yes");
+					System.out.println("2. No");
+					System.out.println("=========================================================================");
+					
+					System.out.print("Please enter 1 for Yes or 2 for No here: ");
+					try
+					{
+						userAnswer = Integer.parseInt(input.nextLine());
+					}
+					catch (NumberFormatException e)
+					{
+						// throwing error above ignoring now only used for debug
+						//e.printStackTrace();
+					}
+					
+					if (userAnswer == 2)
+					{
+						userChoice = true;
+					}
+					else
+					{
+						System.out.print("Please enter your new description for the film here: ");
+						
+						userEnteredDescription = input.nextLine();
+					
+						selectedFilm.setTitle(userEnteredDescription);
+						userChoice = true;
+					}
+				} // end while loop for setting description
+						
+						
+		return selectedFilm;
+
+	}
 	
 	private void printFilmListByIdAndTitle(List<Film> filmList) 
 	{
@@ -537,7 +739,7 @@ public class FilmQueryApp
 		printActorsList(listOfActors);
 	}
 	
-	private void getAndPrintFilmByKeyword(String keyword)
+	private List<Film> getFilmListByKeyword(String keyword)
 	{
 		List<Film> filmList = db.findFilmsByKeyword(keyword);
 		int filmID = 0;
@@ -560,8 +762,8 @@ public class FilmQueryApp
 				System.out.println("There are " + filmList.size() + " films found in your selection.\n");
 
 			}
-			printFilmList(filmList);
 		}
+		return filmList;
 	}
 	
 	

@@ -23,7 +23,7 @@ always always always test queries in myssql or some other tool before you start 
 them in code.  make sure to thoroughly understand table format, data structures, column names, field dependencies......
 
 and when you are cutting and pasting you queries from mysql workbench and putting over
-multiple lines make sure you have spaces betwen each word!!!!
+multiple lines make sure you have spaces between each word!!!!
 
 
 
@@ -192,6 +192,7 @@ To avoid parent-child (foreign key issues), test your delete using only ids of f
 
 
 #### User Story #3B
+completed 11/9/24
 
 In your DAO code, implement updateFilm(Film aFilm) that takes a Film as its parameter.
 

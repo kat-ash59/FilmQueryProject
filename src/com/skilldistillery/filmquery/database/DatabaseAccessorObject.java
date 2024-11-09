@@ -177,7 +177,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor
 			stmt.setString(2, film.getDescription());
 			stmt.setInt(3, film.getId());
 
-			// all data associated with the actor has been updated, so
+			stmt.executeUpdate();
+			
+			// all data associated with the film has been updated, so
 			// let's commit now
 			conn.commit();
 			conn.close();
